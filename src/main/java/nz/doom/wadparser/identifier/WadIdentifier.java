@@ -3,9 +3,12 @@ package nz.doom.wadparser.identifier;
 import nz.doom.wadparser.containers.WadType;
 
 import java.io.IOException;
-import java.nio.file.Files;
+import java.nio.ByteBuffer;
+import java.nio.channels.FileChannel;
 import java.nio.file.Path;
 import java.util.Arrays;
+
+import static java.nio.file.StandardOpenOption.READ;
 
 public class WadIdentifier {
 
@@ -21,7 +24,17 @@ public class WadIdentifier {
      * @throws IOException If the bytes of <code>wadPath</code> cannot be read
      */
     public static WadType getWadType(final Path wadPath) throws IOException {
-        return getWadType(Files.readAllBytes(wadPath));
+
+        ByteBuffer headerByteBuffer = ByteBuffer.allocate(4);
+
+        try (FileChannel fileChannel = (FileChannel.open(wadPath,READ))) {
+            int bytesRead;
+            do {
+                bytesRead = fileChannel.read(headerByteBuffer);
+            } while (bytesRead != -1 && headerByteBuffer.hasRemaining());
+        }
+
+        return getWadType(headerByteBuffer.array());
     }
 
     /**
