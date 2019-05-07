@@ -99,9 +99,12 @@ public class WAD {
 
     /**
      * The filename of this WAD
-     * @return The WAD filename
+     * @return The WAD filename. Can be null if no Path was set
      */
     public String getFilename() {
+        if(wadPath == null){
+            return null;
+        }
         return wadPath.getFileName().toString();
     }
 
