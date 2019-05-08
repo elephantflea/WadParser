@@ -1,6 +1,5 @@
 package nz.doom.wadparser.parser;
 
-import nz.doom.wadparser.containers.WAD;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;

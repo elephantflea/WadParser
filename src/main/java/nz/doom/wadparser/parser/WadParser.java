@@ -60,13 +60,13 @@ public class WadParser {
                     throw new WadParseException("WAD type could not be determined");
             }
 
-            int lumpCount = getIntegerFromByteArray(getByteContent(fileChannel,4,4).array(),0);
+            int lumpCount = getByteContent(fileChannel,4,4).getInt();
 
             if(lumpCount > 65536){
                 throw new WadParseException(String.format("Too many lumps listed in header: %d",lumpCount));
             }
 
-            int directoryPosition = getIntegerFromByteArray(getByteContent(fileChannel,8,4).array(),0);
+            int directoryPosition = getByteContent(fileChannel,8,4).getInt();
 
             if(directoryPosition > wad.getSize()){
                 throw new WadParseException(String.format("Directory offset is larger than WAD file size: %d",directoryPosition));
@@ -76,30 +76,31 @@ public class WadParser {
                 throw new WadParseException("Directory goes off the end of the WAD" );
             }
 
-            byte[] directoryBytes = getByteContent(fileChannel,directoryPosition,lumpCount*dirSize).array();
 
             int lumpEntryNumber = -1;
-            for(int i = 0;i < directoryBytes.length;i+=dirSize){
-                int lumpOffset = getIntegerFromByteArray(directoryBytes,i);
+            for(int position = directoryPosition;position < (directoryPosition + (lumpCount*dirSize));position+=dirSize){
+                int lumpOffset = getByteContent(fileChannel,position,4).getInt();
                 lumpEntryNumber++;
 
-                String lumpName = new String(directoryBytes,i+nameOffset,nameSize, StandardCharsets.US_ASCII);
+                byte[] lumpNameBytes = getByteContent(fileChannel,position+nameOffset,nameSize).array();
+
+                String lumpName = new String(lumpNameBytes, StandardCharsets.US_ASCII);
+
                 int nullOffset = lumpName.indexOf("\0");
                 if(nullOffset > -1){
                     lumpName = lumpName.substring(0,nullOffset);
                 }
 
-                lumpName = lumpName.trim();
                 Lump lump = new Lump();
 
                 lump.setName(lumpName);
                 lump.setOffset(lumpOffset);
                 lump.setPosition(lumpEntryNumber);
-                lump.setSize(getIntegerFromByteArray(directoryBytes,i+4));
+                lump.setSize(getByteContent(fileChannel,position+4,4).getInt());
 
                 if(WadType.WAD2.equals(wadType) || WadType.WAD3.equals(wadType)){
-                    lump.setType(getShortFromByteArray(directoryBytes,i+12));
-                    lump.setCompression(getShortFromByteArray(directoryBytes,i+13) == 1);
+                    lump.setType(getByteContent(fileChannel,position+12,1).getShort());
+                    lump.setCompression(getByteContent(fileChannel,position+14,1).getShort() == 1);
                 }
 
                 if(lump.getSize() == 0){
@@ -111,6 +112,7 @@ public class WadParser {
 
                 wad.addLump(lump);
             }
+
         }
 
         return wad;
@@ -134,38 +136,8 @@ public class WadParser {
             bytesRead = fileChannel.read(buffer);
         } while (bytesRead != -1 && buffer.hasRemaining());
 
+        buffer.rewind();
         return buffer;
     }
 
-    /**
-     * TODO: This
-     * @param byteArray
-     * @param start
-     * @return
-     */
-    private static int getIntegerFromByteArray(final byte[] byteArray,final int start){
-        byte[] newByte = new byte[4];
-
-        System.arraycopy(byteArray,start,newByte,0,4);
-
-        final ByteBuffer byteBuffer = ByteBuffer.wrap(newByte);
-        byteBuffer.order(ByteOrder.LITTLE_ENDIAN);
-        return byteBuffer.getInt();
-    }
-
-    /**
-     * TODO: This
-     * @param byteArray
-     * @param start
-     * @return
-     */
-    private static short getShortFromByteArray(final byte[] byteArray,final int start){
-        byte[] newByte = new byte[4];
-
-        System.arraycopy(byteArray,start,newByte,0,4);
-
-        final ByteBuffer byteBuffer = ByteBuffer.wrap(newByte);
-        byteBuffer.order(ByteOrder.LITTLE_ENDIAN);
-        return byteBuffer.getShort();
-    }
 }
