@@ -27,13 +27,13 @@ public class WadParser {
 
 
     /**
-     * TODO: this
-     * @param wadPath
-     * @return
-     * @throws IOException
-     * @throws WadParseException
+     * Parses the given Path into a {@link WAD}
+     * @param wadPath The path to parse
+     * @return The parsed WAD
+     * @throws IOException Thrown if there are any issues reading the Path
+     * @throws WadParseException Thrown if the WAD does not meet the specifications
      */
-    public static WAD parse(Path wadPath) throws IOException, WadParseException {
+    public static WAD parse(final Path wadPath) throws IOException, WadParseException {
 
         if(wadPath == null){
             throw new WadParseException("WAD path is null");
@@ -120,12 +120,12 @@ public class WadParser {
     }
 
     /**
-     * Returns any array of bytes from the file channel
+     * Returns a buffer of bytes from the file channel
      * @param fileChannel The file change to read the bytes from
      * @param position The position to read the bytes from
      * @param length How many bytes to read
      * @return The array of bytes read
-     * @throws IOException
+     * @throws IOException Thrown if the filechannel cannot be read
      */
     private static ByteBuffer getByteContent(final FileChannel fileChannel, final long position, final int length) throws IOException {
         final ByteBuffer buffer = ByteBuffer.allocate(length);
