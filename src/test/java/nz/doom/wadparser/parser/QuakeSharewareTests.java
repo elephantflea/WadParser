@@ -20,8 +20,8 @@ public class QuakeSharewareTests {
 
     @BeforeAll
     public static void loadWad() throws URISyntaxException, IOException, WadParseException {
-        Path doom1SharewarePath = Paths.get(QuakeSharewareTests.class.getResource("/wads/quake-gfx.wad").toURI());
-        quakeShareware = WadParser.parse(doom1SharewarePath);
+        Path quakeSharewarePath = Paths.get(QuakeSharewareTests.class.getResource("/wads/quake-gfx.wad").toURI());
+        quakeShareware = WadParser.parse(quakeSharewarePath);
     }
 
     @Test
