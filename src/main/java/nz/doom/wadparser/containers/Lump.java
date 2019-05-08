@@ -104,7 +104,7 @@ public class Lump implements Comparable<Lump> {
     }
 
     /**
-     * The position of the lump in the WAD. Not the byte offset.
+     * The position of the lump in the WAD. Not the byte offset. 0 based
      * @see Lump#getOffset()
      * @return The lump offset
      */

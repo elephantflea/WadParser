@@ -48,6 +48,7 @@ public class WadParser {
         try (FileChannel fileChannel = (FileChannel.open(wadPath,READ))){
 
             WadType wadType = WadIdentifier.getWadType(wadPath);
+            wad.setWadType(wadType);
 
             switch(wadType){
                 case WAD2:
