@@ -100,8 +100,8 @@ public class WadParser {
                 lump.setSize(getByteContent(fileChannel,position+4,4).getInt());
 
                 if(WadType.WAD2.equals(wadType) || WadType.WAD3.equals(wadType)){
-                    lump.setType(getByteContent(fileChannel,position+12,1).getShort());
-                    lump.setCompression(getByteContent(fileChannel,position+14,1).getShort() == 1);
+                    lump.setType(getByteContent(fileChannel,position+12,2).getShort());
+                    lump.setCompression(getByteContent(fileChannel,position+14,2).getShort() == 1);
                 }
 
                 if(lump.getSize() == 0){
