@@ -8,6 +8,7 @@ public class Lump implements Comparable<Lump> {
     private String name = null;
     private byte[] bytes = null;
     private boolean isCompressed = false;
+    private boolean isCorrupt = false;
 
     /**
      * The size of this lump in bytes
@@ -23,6 +24,22 @@ public class Lump implements Comparable<Lump> {
      */
     public void setSize(int size) {
         this.size = size;
+    }
+
+    /**
+     * Is this lump corrupt somehow
+     * @return corrupt or not
+     */
+    public boolean isCorrupt(){
+        return isCorrupt;
+    }
+
+    /**
+     * Set whether or not this lump is corrupt
+     * @param corrupt The lumps corrupt status
+     */
+    public void setCorrupt(boolean corrupt){
+        this.isCorrupt = corrupt;
     }
 
     /**

@@ -79,6 +79,8 @@ public class WadParser {
 
 
             int lumpEntryNumber = -1;
+            int maxLumpSize = wad.getSize() - (dirSize * lumpCount);
+
             for(int position = directoryPosition;position < (directoryPosition + (lumpCount*dirSize));position+=dirSize){
                 int lumpOffset = getByteContent(fileChannel,position,4).getInt();
                 lumpEntryNumber++;
@@ -104,7 +106,11 @@ public class WadParser {
                     lump.setCompression(getByteContent(fileChannel,position+14,2).getShort() == 1);
                 }
 
-                if(lump.getSize() == 0){
+
+                if(lump.getSize() < 0 || lump.getSize() > maxLumpSize){
+                    lump.setBytes(new byte[]{});
+                    lump.setCorrupt(true);
+                }else if(lump.getSize() == 0){
                     lump.setBytes(new byte[]{});
                 }else{
                     byte[] lumpBytes = getByteContent(fileChannel, lumpOffset, lump.getSize()).array();
