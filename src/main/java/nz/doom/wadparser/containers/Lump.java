@@ -59,7 +59,8 @@ public class Lump implements Comparable<Lump> {
     }
 
     /**
-     * The name of this lump
+     * The name of this lump. If the lump's name is corrupt then the name will be set to
+     * <code><CORRUPT NAME></code>
      * @return The name of this lump
      */
     public String getName() {

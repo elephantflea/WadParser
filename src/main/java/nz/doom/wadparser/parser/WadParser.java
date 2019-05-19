@@ -94,9 +94,17 @@ public class WadParser {
                     lumpName = lumpName.substring(0,nullOffset);
                 }
 
+                lumpName = lumpName.trim();
+
                 Lump lump = new Lump();
 
-                lump.setName(lumpName);
+                if(lumpName.isEmpty()){
+                    lump.setName("<CORRUPT NAME>");
+                    lump.setCorrupt(true);
+                }else{
+                    lump.setName(lumpName);
+                }
+
                 lump.setOffset(lumpOffset);
                 lump.setPosition(lumpEntryNumber);
                 lump.setSize(getByteContent(fileChannel,position+4,4).getInt());
