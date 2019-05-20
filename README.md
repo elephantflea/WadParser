@@ -1,5 +1,11 @@
 # WadParser
 A helper library to parse WAD files and extract lumps contained in WAD files.
+
+Based on:
+* https://doomwiki.org/wiki/WAD
+* http://www.gamers.org/dEngine/quake/spec/quake-spec34/qkspec_7.htm
+* http://hlbsp.sourceforge.net/index.php?content=waddef
+
 ## Supported Formats
 * IWAD/PWAD
   * Doom, Heretic, Hexen and Strife
