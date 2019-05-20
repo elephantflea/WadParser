@@ -73,6 +73,10 @@ public class WadParser {
                 throw new WadParseException(String.format("Directory offset is larger than WAD file size: %d",directoryPosition));
             }
 
+            if(directoryPosition < 12){
+                throw new WadParseException(String.format("Directory offset is before the header at position %d",directoryPosition));
+            }
+
             if((directoryPosition + (dirSize * lumpCount))> wad.getSize()) {
                 throw new WadParseException("Directory goes off the end of the WAD" );
             }
@@ -115,7 +119,7 @@ public class WadParser {
                 }
 
 
-                if(lump.getSize() < 0 || lump.getSize() > maxLumpSize){
+                if(lump.getSize() < 0 || lump.getSize() > maxLumpSize || lumpOffset < 12){ // 12 is the header size
                     lump.setBytes(new byte[]{});
                     lump.setCorrupt(true);
                 }else if(lump.getSize() == 0){
