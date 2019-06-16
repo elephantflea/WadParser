@@ -119,10 +119,10 @@ public class WadParser {
                 }
 
 
-                if(lump.getSize() < 0 || lump.getSize() > maxLumpSize || lumpOffset < 12){ // 12 is the header size
+                if(lump.getSize() == 0){
                     lump.setBytes(new byte[]{});
+                }else if(lump.getSize() < 0 || lump.getSize() > maxLumpSize || lumpOffset < 12){ // 12 is the header size
                     lump.setCorrupt(true);
-                }else if(lump.getSize() == 0){
                     lump.setBytes(new byte[]{});
                 }else{
                     byte[] lumpBytes = getByteContent(fileChannel, lumpOffset, lump.getSize()).array();

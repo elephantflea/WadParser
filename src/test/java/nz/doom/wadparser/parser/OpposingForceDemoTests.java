@@ -58,4 +58,15 @@ public class OpposingForceDemoTests {
         assertEquals(1,lumps.size());
     }
 
+    @Test
+    public void corruptLumpCheck(){
+        List<Lump> lumps = oppposingForceDemo.getLumps();
+
+        assertNotNull(lumps);
+
+        for(Lump lump : lumps){
+            assertFalse(lump.isCorrupt());
+        }
+    }
+
 }

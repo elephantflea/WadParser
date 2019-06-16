@@ -58,4 +58,15 @@ public class DoomSharewareTests {
         assertEquals(9,lumps.size());
     }
 
+    @Test
+    public void corruptLumpCheck(){
+        List<Lump> lumps = doom1Shareware.getLumps();
+
+        assertNotNull(lumps);
+
+        for(Lump lump : lumps){
+            assertFalse(lump.isCorrupt());
+        }
+    }
+
 }
