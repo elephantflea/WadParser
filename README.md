@@ -36,3 +36,5 @@ public class ListLumps {
     }    
 }
 ```
+### See also
+Also available for C# .NET Core https://github.com/elephantflea/WadParser-dotnet
