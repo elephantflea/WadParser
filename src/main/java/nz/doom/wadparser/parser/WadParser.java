@@ -91,12 +91,16 @@ public class WadParser {
 
                 byte[] lumpNameBytes = getByteContent(fileChannel,position+nameOffset,nameSize).array();
 
-                String lumpName = new String(lumpNameBytes, StandardCharsets.US_ASCII);
+                int lumpNameLength = nameSize;
 
-                int nullOffset = lumpName.indexOf("\0");
-                if(nullOffset > -1){
-                    lumpName = lumpName.substring(0,nullOffset);
+                for(int i = 0; i < lumpNameBytes.length; i++){
+                    if(lumpNameBytes[i] == 0){
+                        lumpNameLength = i;
+                        break;
+                    }
                 }
+
+                String lumpName = new String(lumpNameBytes,0,lumpNameLength, StandardCharsets.US_ASCII);
 
                 lumpName = lumpName.trim();
 
